@@ -7,6 +7,7 @@ Project 4 - Detection
 '''
 
 import glob
+import pandas as pd
 from collections import defaultdict
 
 
@@ -49,7 +50,7 @@ def parseGroundTruth():
     test_words = []
     actual_counts = 0 # actual counts of numbers of words after filtering
     for truth, test in zip(truth_files, test_files):
-        
+            
         with open(truth) as fd_truth:
             with open(test) as fd_test:
                 for truth_line, test_line in zip(fd_truth, fd_test):
@@ -70,10 +71,11 @@ def parseGroundTruth():
     print(test_words[:20])
     '''
     
+    '''
     # from the lists of words (truth, test) compare each of them
     # label 1 if test is the same as truth (correct)
     # label 0 if test is the different (wrong)
-    
+
     label_dict = defaultdict(int)
 
     for truth, test in zip(truth_words, test_words):
@@ -83,18 +85,51 @@ def parseGroundTruth():
             label_dict[test] = 0
 
     print(label_dict)
+    '''
 
+    # due to not being able to store duplicates, switching to list
 
-
-
-
-
-
-
-        
+    label = []
+    for truth, test in zip(truth_words, test_words):
+        if truth == test:
+            label.append(1)
+        else:
+            label.append(0)
     
+    # uncomment below for commenting
+    '''
+    print(label[:20])
+    '''
 
-if __name__ == '__main__':
+
+
+def buildFeatures():
+
+def f1_length():
+
+def f2_num_vowels():
+
+def f3_num_cons():
+
+def f4_v_div_l():
+
+def f5_c_div_l():
+        
+def f6_v_div_c():
+
+def f7_num_spec_sym():
+
+def f8_d_div_l():
+
+def f9_num_lower():
+
+def f10_num_upp():
+
+def f11_lower_div_l():
+
+def f12_upp_div_l():
+
+ __name__ == '__main__':
 
     parseGroundTruth()
 
