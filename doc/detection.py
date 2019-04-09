@@ -12,7 +12,6 @@ from collections import defaultdict
 
 def parseGroundTruth():
         
-    truth_dict = defaultdict(int)
 
     truth_counts = 0
     ground_tokens = []
@@ -46,12 +45,11 @@ def parseGroundTruth():
             test_files.append(test)
 
     # only taking lines that have the same number of words
-
     truth_words = []
     test_words = []
     actual_counts = 0 # actual counts of numbers of words after filtering
-
-    for truth, test in zip(truth_files, test_words):
+    for truth, test in zip(truth_files, test_files):
+        
         with open(truth) as fd_truth:
             with open(test) as fd_test:
                 for truth_line, test_line in zip(fd_truth, fd_test):
@@ -62,6 +60,34 @@ def parseGroundTruth():
                             actual_counts += 1
                             truth_words.append(truth_word)
                             test_words.append(test_word)
+
+    # uncomment below for testing
+    '''
+    print(actual_counts)
+    print(len(truth_words))
+    print(len(test_words))
+    print(truth_words[:20])
+    print(test_words[:20])
+    '''
+    
+    # from the lists of words (truth, test) compare each of them
+    # label 1 if test is the same as truth (correct)
+    # label 0 if test is the different (wrong)
+    
+    label_dict = defaultdict(int)
+
+    for truth, test in zip(truth_words, test_words):
+        if truth == test:
+            label_dict[test] = 1
+        else:
+            label_dict[test] = 0
+
+    print(label_dict)
+
+
+
+
+
 
 
 
