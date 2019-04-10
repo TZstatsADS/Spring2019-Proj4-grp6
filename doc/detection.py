@@ -8,10 +8,11 @@ Project 4 - Detection
 
 import glob
 import pandas as pd
+from sklearn.model_selection import train_test_split
 from collections import defaultdict
 
 
-def parseGroundTruth():
+def labelTesseract():
         
 
     truth_counts = 0
@@ -101,8 +102,17 @@ def parseGroundTruth():
     print(label[:20])
     '''
 
+    return (test_words, label)
+
+def div_train(words, label, k = 0.2):
+
+    data = pd.DataFrame(words)
+    # split up data into k / 1-k percentage -- by defauly 80% train 20% test
+    train_data, test_data, train_label, test_label = train_test_split(words, label, test_size = k)
 
 
+
+'''
 def buildFeatures():
 
 def f1_length():
@@ -129,7 +139,28 @@ def f11_lower_div_l():
 
 def f12_upp_div_l():
 
- __name__ == '__main__':
+def f13_quot_same_symb():
 
-    parseGroundTruth()
+def f14_alpha_numerical():
+
+def f15_non_alpha_numerical():
+
+def f16_consec_cons():
+
+def f17_infix():
+
+def f18_bigram():
+
+def f19_most_freq_symb():
+
+def f20_non_alphabetical():
+
+def f21_levenshtein():
+'''
+
+
+if __name__ == '__main__':
+
+    words, label = labelTesseract()
+    div_train(words, label)
 
