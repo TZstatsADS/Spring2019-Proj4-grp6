@@ -10,6 +10,9 @@ import glob
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from collections import defaultdict
+from itertools import groupby
+
+#import feature as feature
 
 
 def labelTesseract():
@@ -46,6 +49,7 @@ def labelTesseract():
             truth_files.append(truth)
             test_files.append(test)
 
+
     # only taking lines that have the same number of words
     truth_words = []
     test_words = []
@@ -62,15 +66,14 @@ def labelTesseract():
                             actual_counts += 1
                             truth_words.append(truth_word)
                             test_words.append(test_word)
-
     # uncomment below for testing
-    '''
+    
     print(actual_counts)
     print(len(truth_words))
     print(len(test_words))
     print(truth_words[:20])
     print(test_words[:20])
-    '''
+    
     
     '''
     # from the lists of words (truth, test) compare each of them
@@ -98,9 +101,9 @@ def labelTesseract():
             label.append(0)
     
     # uncomment below for commenting
-    '''
+    
     print(label[:20])
-    '''
+    
 
     return (test_words, label)
 
@@ -111,56 +114,227 @@ def div_train(words, label, k = 0.2):
     train_data, test_data, train_label, test_label = train_test_split(words, label, test_size = k)
 
 
+    return (train_data, test_data, train_label, test_label)
 
-'''
-def buildFeatures():
 
-def f1_length():
 
-def f2_num_vowels():
+def buildFeatures(train_data):
+    # f1
+    length = []
+    
+    # f2
+    v_count = []
+    c_count = []
+    v_div_l = []
+    c_div_l = []
+    v_div_c = []
+    
+    # f3
+    non_alnum = []
+    non_alnum_div_l = []
+    
+    # f4
+    digit = []
+    digit_l = []
 
-def f3_num_cons():
+    # f5
+    lower = []
+    upper = []
+    lower_div_l = []
+    upper_div_l = []
 
-def f4_v_div_l():
+    #f6
+    three_consec_cons = []
 
-def f5_c_div_l():
+    #f7
+    alpha_num = []
+
+    #f8
+    six_consec_cons = []
+
+    #f9
+    infix = []
+
+    for word in train_data:
+        length.append(f_1(word))
         
-def f6_v_div_c():
+        v_count.append(f_2(word)[0])
+        c_count.append(f_2(word)[1])
+        v_div_l.append(f_2(word)[2])
+        c_div_l.append(f_2(word)[3])
+        v_div_c.append(f_2(word)[4])
+        
+        non_alnum.append(f_3(word)[0])
+        non_alnum_div_l.append(f_3(word)[1])
 
-def f7_num_spec_sym():
+        digit.append(f_4(word)[0])
+        digit_l.append(f_4(word)[1])
 
-def f8_d_div_l():
+        lower.append(f_5(word)[0])
+        upper.append(f_5(word)[1])
+        lower_div_l.append(f_5(word)[2])
+        upper_div_l.append(f_5(word)[3])
 
-def f9_num_lower():
+        three_consec_cons.append(f_6(word))
 
-def f10_num_upp():
+        alpha_num.append(f_7(word))
 
-def f11_lower_div_l():
+        six_consec_cons.append(f_8(word))
 
-def f12_upp_div_l():
+        infix.append(f_9(word))
 
-def f13_quot_same_symb():
 
-def f14_alpha_numerical():
+    # create DataFrame
 
-def f15_non_alpha_numerical():
+    df = pd.DataFrame({'length': length,
+                       'num_vowels': v_count,
+                       'num_conso': c_count,
+                       'v_div_l': v_div_l,
+                       'c_div_l': c_div_l,
+                       'v_div_c': v_div_c,
+                       'non_alnum': non_alnum,
+                       'non_alnum_div_l': non_alnum_div_l,
+                       'digit': digit,
+                       'digit_l': digit_l,
+                       'lower': lower,
+                       'upper': upper,
+                       'lower_div_l': lower_div_l,
+                       'upper_div_l': upper_div_l,
+                       'three_consec_cons': three_consec_cons,
+                       'alpha_num': alpha_num,
+                       'six_consec_cons': six_consec_cons,
+                       'infix': infix})
 
-def f16_consec_cons():
 
-def f17_infix():
+    return df
 
-def f18_bigram():
+def f_1(word):
+    
+    return len(word)
 
-def f19_most_freq_symb():
+def f_2(word):
+    l = len(word)
+    vowels = 'aeiou'
+    cons = 'bcdfghjklmnpqrstvwxyz'
+    v_count = 0
+    c_count = 0
+    
+    for c in word:
+        if c in vowels:
+            v_count += 1
+        elif c in cons:
+            c_count += 1
 
-def f20_non_alphabetical():
 
-def f21_levenshtein():
-'''
+    if c_count == 0:
+        return (v_count, c_count, v_count/l, c_count/l, 0)
+
+    return (v_count, c_count, v_count/l, c_count/l, v_count/c_count)
+
+def f_3(word):
+    l = len(word)
+    non_alnum = 0
+
+    for c in word:
+        if not c.isalnum():
+            non_alnum += 1
+
+    return (non_alnum, non_alnum/l)
+
+def f_4(word):
+    l = len(word)
+    digit = 0
+
+    for c in word:
+        if c.isdigit():
+            digit += 1
+    return (digit, digit/l)
+
+def f_5(word):
+    l = len(word)
+    upper = 0 
+    lower = 0
+
+    for c in word:
+        if c.isupper():
+            upper += 1
+        elif c.islower():
+            lower += 1 
+
+    return (lower, upper, lower/l, upper/l)
+
+def f_6(word):
+    l = len(word)
+    groups = groupby(word)
+    result = [(label, sum(1 for _ in group)) for label, group in groups]
+
+    max_count = float('-inf')
+    for word_count in result:
+        if word_count[1] > max_count:
+            max_count = word_count[1]
+
+    if max_count >= 3:
+        return max_count/l
+    else:
+        return 0
+
+def f_7(word):
+    l = len(word)
+    alnum = 0
+
+    for c in word:
+        if c.isalnum():
+            alnum += 1
+    
+    non_alnum = l - alnum
+
+    if non_alnum > alnum:
+        return 1
+    else:
+        return 0
+
+def f_8(word):
+    cons = 'bcdfghjklmnpqrstvwxyz'
+    consec_cons = 0
+    max_count = 0
+
+    for c in word:
+        if c in cons:
+            consec_cons += 1
+        else:
+            if max_count < consec_cons:
+                max_count = consec_cons
+            consec_cons = 0
+    if max_count == 0:
+        max_count = consec_cons
+
+    if max_count >= 6:
+        return 1
+    else:
+        return 0
+
+def f_9(word):
+    infix = word[1:-1]
+    non_alnum = 0
+    
+    for c in infix:
+        if not c.isalnum():
+            non_alnum += 1
+    if non_alnum >= 2:
+        return 1
+    else:
+        return 0
 
 
 if __name__ == '__main__':
 
     words, label = labelTesseract()
-    div_train(words, label)
+    train_data, test_data, train_label, test_label = div_train(words, label)
+    print(train_data[:10])
+    featureMatrix = buildFeatures(train_data)
+    # uncomment for testing
+    '''
+    head = featureMatrix.head()
+    print(head.to_string())
+    '''
 
