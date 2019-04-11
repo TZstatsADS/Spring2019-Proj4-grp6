@@ -9,8 +9,11 @@ Project 4 - Detection
 import glob
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+import collections
 from collections import defaultdict
 from itertools import groupby
+import nltk
 
 #import feature as feature
 
@@ -67,13 +70,13 @@ def labelTesseract():
                             truth_words.append(truth_word)
                             test_words.append(test_word)
     # uncomment below for testing
-    
+    ''' 
     print(actual_counts)
     print(len(truth_words))
     print(len(test_words))
     print(truth_words[:20])
     print(test_words[:20])
-    
+    '''
     
     '''
     # from the lists of words (truth, test) compare each of them
@@ -101,9 +104,9 @@ def labelTesseract():
             label.append(0)
     
     # uncomment below for commenting
-    
+    '''
     print(label[:20])
-    
+    '''
 
     return (test_words, label)
 
@@ -118,7 +121,7 @@ def div_train(words, label, k = 0.2):
 
 
 
-def buildFeatures(train_data):
+def buildFeatures(train_data, bigram_dict):
     # f1
     length = []
     
@@ -155,6 +158,15 @@ def buildFeatures(train_data):
     #f9
     infix = []
 
+    #f10
+    bigram = []
+
+    #f11
+    most_freq = []
+
+    #f12
+    non_div_alpha = []
+
     for word in train_data:
         length.append(f_1(word))
         
@@ -183,6 +195,15 @@ def buildFeatures(train_data):
 
         infix.append(f_9(word))
 
+        # can change the scaling constant (third parameter)
+        bigram.append(f_10(word, bigram_dict, 10000))
+
+        most_freq.append(f_11(word))
+
+        non_div_alpha.append(f_12(word))
+
+
+
 
     # create DataFrame
 
@@ -203,7 +224,10 @@ def buildFeatures(train_data):
                        'three_consec_cons': three_consec_cons,
                        'alpha_num': alpha_num,
                        'six_consec_cons': six_consec_cons,
-                       'infix': infix})
+                       'infix': infix,
+                       'bigram': bigram,
+                       'most_freq': most_freq,
+                       'non_div_alpha': non_div_alpha})
 
 
     return df
@@ -325,16 +349,94 @@ def f_9(word):
     else:
         return 0
 
+def f_10(word, bigram_dict, c = 10000):
+
+    word = word.lower()
+    count = 0.0
+    naturalness = 0.0
+    for i in range(len(word)-1):
+        count += 1.0
+        naturalness += bigram_dict[(word[i], word[i+1])] / c
+
+    return naturalness
+
+# return frequency of most frequent symbol
+def f_11(word):
+    l = len(word)
+    most_freq = collections.Counter(word).most_common(1)[0][1]
+
+    if most_freq >= 3:
+        return most_freq/l
+    else:
+        return 0
+
+def f_12(word):
+    l = len(word)
+    alpha = 0
+
+    for c in word:
+        if c.isalpha():
+            alpha += 1
+
+    non_alpha = l - alpha
+    if alpha == 0:
+        return 0
+    
+    return non_alpha / alpha
+
+
+
+
+
+def compute_bigram():
+    
+    bigram_dict = defaultdict(int)
+    truth_files_list = glob.glob('../data/ground_truth/*.txt')
+    for file in truth_files_list:
+        with open(file) as fd:
+            for line in fd:
+                each_line = line.strip().split()
+                for word in each_line:
+                    word = word.lower()
+                    for i in range(len(word)-1):
+                        bigram_dict[(word[i], word[i+1])] += 1
+
+    return bigram_dict
+
+
+
 
 if __name__ == '__main__':
 
     words, label = labelTesseract()
     train_data, test_data, train_label, test_label = div_train(words, label)
-    print(train_data[:10])
-    featureMatrix = buildFeatures(train_data)
+    bigram_dict = compute_bigram()
+    featureMatrix_train = buildFeatures(train_data, bigram_dict)
+    featureMatrix_test = buildFeatures(test_data, bigram_dict)
+    
     # uncomment for testing
     '''
-    head = featureMatrix.head()
+    head = featureMatrix_train.head()
     print(head.to_string())
     '''
+
+    # build classifier
+    svm_class = SVC(kernel='rbf', verbose=True)
+    svm_class.fit(featureMatrix_train, train_label)
+
+    # prediction
+    prediction = svm_class.predict(featureMatrix_test)
+
+    output = pd.DataFrame({'data': test_data,
+                           'label': prediction})
+
+    print(output[:20])
+
+    ##### evaluation
+    #confustion Matrix
+    from sklearn.metrics import classification_report, confusion_matrix
+    
+    print(confusion_matrix(label_test, prediction))
+    print(classification_report(label_test, prediction))
+
 
