@@ -1,0 +1,6 @@
+Feature6: aaaaaaa bbbbbbb
+Feature7: abc-=/\ abc//
+Feature8: bcdfghl bcdfaaa
+Feature9: a+-\b abb++c
+The strings above are mainly designed for testing the corresponding features, but we could also use these strings to test whether other features extractions work very well.
+Final test string: 	aaaaaaa bbbbbbb abc-=/\ abc// bcdfghl bcdfaaa a+-\b abb++c
