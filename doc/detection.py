@@ -421,7 +421,7 @@ if __name__ == '__main__':
     '''
 
     # build classifier
-    svm_class = SVC(kernel='rbf', verbose=True)
+    svm_class = SVC(kernel='rbf', verbose=True, gamma='scale')
     svm_class.fit(featureMatrix_train, train_label)
 
     # prediction
@@ -436,7 +436,7 @@ if __name__ == '__main__':
     #confustion Matrix
     from sklearn.metrics import classification_report, confusion_matrix
     
-    print(confusion_matrix(label_test, prediction))
-    print(classification_report(label_test, prediction))
+    print(confusion_matrix(test_label, prediction))
+    print(classification_report(test_label, prediction))
 
 
