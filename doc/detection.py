@@ -359,7 +359,7 @@ def f_10(word, bigram_dict, c = 10000):
         count += 1.0
         naturalness += bigram_dict[(word[i], word[i+1])] / c
 
-    return naturalness
+    return naturalness / count
 
 # return frequency of most frequent symbol
 def f_11(word):
@@ -436,7 +436,7 @@ if __name__ == '__main__':
 
     output = pd.DataFrame({'data': test_data,
                            'label': prediction})
-    
+
     print(output[:20])
 
     ##### evaluation
