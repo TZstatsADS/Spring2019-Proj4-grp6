@@ -21,21 +21,8 @@ import nltk
 def labelTesseract():
         
 
-    truth_counts = 0
-    ground_tokens = []
-    # create a list of all .txt files
-    truth_files_list = glob.glob('../data/ground_truth/*.txt')
-    # reading the ground truth file
-    for file in truth_files_list:
-        with open(file) as fd:
-            for line in fd:
-                each_line = line.strip().split()
-                for word in each_line:
-                    ground_tokens.append(word)
-                    truth_counts += 1
-
-
     
+    truth_files_list = glob.glob('../data/ground_truth/*.txt') 
     test_files_list = glob.glob('../data/tesseract/*.txt')
 
     # only taking the ones that have the same number of lines in the file
@@ -56,6 +43,7 @@ def labelTesseract():
     # only taking lines that have the same number of words
     truth_words = []
     test_words = []
+    truth_test_pair = [] # for correction
     actual_counts = 0 # actual counts of numbers of words after filtering
     for truth, test in zip(truth_files, test_files):
             
@@ -69,6 +57,7 @@ def labelTesseract():
                             actual_counts += 1
                             truth_words.append(truth_word)
                             test_words.append(test_word)
+                            truth_test_pair.append((truth_word, test_word))
     # uncomment below for testing
     ''' 
     print(actual_counts)
@@ -108,16 +97,28 @@ def labelTesseract():
     print(label[:20])
     '''
 
-    return (test_words, label)
+    return (truth_test_pair, test_words, label)
 
-def div_train(words, label, k = 0.2):
+def div_train(pair, label, k = 0.2):
 
-    data = pd.DataFrame(words)
+    # data = pd.DataFrame(words)
     # split up data into k / 1-k percentage -- by defauly 80% train 20% test
-    train_data, test_data, train_label, test_label = train_test_split(words, label, test_size = k)
+    train_data, test_data, train_label, test_label = train_test_split(pair, label, test_size = k)
+
+    X_train = []
+    X_test = []
+    X_train_truth = []
+    X_test_truth = []
+    for data in train_data:
+        X_train.append(data[1])
+        X_train_truth.append(data[0])
+    for data in test_data:
+        X_test.append(data[1])
+        X_test_truth.append(data[0])
 
 
-    return (train_data, test_data, train_label, test_label)
+
+    return (X_train, X_test, train_label, test_label, X_train_truth, X_test_truth)
 
 
 
@@ -384,10 +385,6 @@ def f_12(word):
     
     return non_alpha / alpha
 
-
-
-
-
 def compute_bigram():
     
     bigram_dict = defaultdict(int)
@@ -403,13 +400,23 @@ def compute_bigram():
 
     return bigram_dict
 
-
-
-
 if __name__ == '__main__':
 
-    words, label = labelTesseract()
-    train_data, test_data, train_label, test_label = div_train(words, label)
+    pair, words, label = labelTesseract()
+    train_data, test_data, train_label, test_label, ground_truth_train, ground_truth_test = div_train(pair, label)
+
+    # uncomment to test for truth, tesseract pair
+    '''
+    print(train_data[:10])
+    print(ground_truth_train[:10])
+    print(train_label[:10])
+    
+    print(test_data[:10])
+    print(ground_truth_test[:10])
+    print(test_label[:10])
+    '''
+
+    
     bigram_dict = compute_bigram()
     featureMatrix_train = buildFeatures(train_data, bigram_dict)
     featureMatrix_test = buildFeatures(test_data, bigram_dict)
@@ -429,7 +436,7 @@ if __name__ == '__main__':
 
     output = pd.DataFrame({'data': test_data,
                            'label': prediction})
-
+    
     print(output[:20])
 
     ##### evaluation
@@ -439,4 +446,4 @@ if __name__ == '__main__':
     print(confusion_matrix(test_label, prediction))
     print(classification_report(test_label, prediction))
 
-
+   
