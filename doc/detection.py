@@ -428,7 +428,7 @@ if __name__ == '__main__':
     '''
 
     # build classifier
-    svm_class = SVC(kernel='rbf', verbose=True, gamma='scale')
+    svm_class = SVC(kernel='rbf', verbose=True, gamma='scale',random_state = 123)
     svm_class.fit(featureMatrix_train, train_label)
 
     # prediction
