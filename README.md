@@ -5,7 +5,7 @@
 ### [Full Project Description](doc/project4_desc.md)
 
 
-+ Team #Spring 2019
++ Team #Spring 2019#
 + Team members
 	+ Edward Yoo
 	+ Guanren Wang
