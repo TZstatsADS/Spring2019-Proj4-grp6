@@ -7,13 +7,13 @@
 
 + Team **Spring 2019**
 + Team members
-	+ Edward Yoo
+	+ HyunBin Yoo
 	+ Guanren Wang
 	+ Yunhao Huang
 	+ Feng Su
 	+ Ying Jin
 
-+ Project summary: In this project, we created an OCR post-processing procedure to enhance Tesseract OCR output. 
++ Project summary: In this project, we created an OCR post-processing procedure to enhance Tesseract OCR output. For dectection we used the D-3 method which includes feature engineering and training the Support Vector Machine (SVM) for the classification. First, we labelled tesseract using the ground truth, but we ignored the files with different number of lines and lines with different number of words. For the improvement, we could have implemented a way to include all the files and all the lines. Each feature was built using separate functions and Buildfeature fuction is used to aggregate all the features and to create a feature matrix. Then the result was fed into SVM for training. Training took about 30 mins. 
 	
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
 
