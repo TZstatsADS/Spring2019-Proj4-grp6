@@ -4,15 +4,14 @@
 
 ### [Full Project Description](doc/project4_desc.md)
 
-Term: Spring 2019
 
-+ Team #
++ Team **Spring 2019**
 + Team members
-	+ team member 1
-	+ team member 2
-	+ team member 3
-	+ team member 4
-	+ team member 5
+	+ Edward Yoo
+	+ Guanren Wang
+	+ Yunhao Huang
+	+ Feng Su
+	+ Ying Jin
 
 + Project summary: In this project, we created an OCR post-processing procedure to enhance Tesseract OCR output. 
 	
