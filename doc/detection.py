@@ -359,6 +359,8 @@ def f_10(word, bigram_dict, c = 10000):
         count += 1.0
         naturalness += bigram_dict[(word[i], word[i+1])] / c
 
+    if count == 0.0:
+        return 0
     return naturalness / count
 
 # return frequency of most frequent symbol
@@ -428,7 +430,7 @@ if __name__ == '__main__':
     '''
 
     # build classifier
-    svm_class = SVC(kernel='rbf', verbose=True, gamma='scale',random_state = 123)
+    svm_class = SVC(kernel='rbf', verbose=True, gamma='scale')
     svm_class.fit(featureMatrix_train, train_label)
 
     # prediction
