@@ -20,11 +20,8 @@ In this project, we created an OCR post-processing procedure to enhance Tesserac
 For correction part, we used C-3 method which can help us to detect those words containning exact one typos on the test data from detection part. First, we used edit distance to find each typo's potential correction candidates. Then we used Bayesian combination rule to choose the most possible correction. And the algorithm we used to calcaute the pr(t|c) is stated as following:
 
 	+ del[cp_ 1, cp]/chars[cp-1, cp] if deletion
-	
 	+ add[cp_ l, tp]/chars[cp-l]  if insertion
-	
 	+ sub[tp, Cp]/chars[cp] if substitution 
-	
 	+ rev[cp, cp + l]/chars[cp, cp + 1] if reversal 
 	
 We should be careful when we deal with the cases then the index of position of correction equal to 0 since in these cases, we don't have any information about cp-1 and according to the advice of professor,we calculate the number of words in training set instead which is also quite rational. The method we use to calcuate pr(c) is ELE and the posterior probility pr(c)*pr(t|c). 
