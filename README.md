@@ -18,6 +18,7 @@
 In this project, we created an OCR post-processing procedure to enhance Tesseract OCR output. For dectection we used the D-3 method which includes feature engineering and training the Support Vector Machine (SVM) for the classification. First, we labelled tesseract using the ground truth, but we ignored the files with different number of lines and lines with different number of words. For the improvement, we could have implemented a way to include all the files and all the lines. Each feature was built using separate functions and Buildfeature fuction is used to aggregate all the features and to create a feature matrix. Then the result was fed into SVM for training. Training took about 30 mins. 
 
 For correction part, we used C-3 method which can help us to detect those words containning exact one typos on the test data from detection part. First, we used edit distance to find each typo's potential correction candidates. Then we used Bayesian combination rule to choose the most possible correction. And the algorithm we used to calcaute the pr(t|c) is stated as following:
+
 	+ del[cp_ 1, cp]/chars[cp-1, cp] if deletion
 	
 	+ add[cp_ l, tp]/chars[cp-l]  if insertion
