@@ -24,7 +24,7 @@ For correction part, we used C-3 method which can help us to detect those words 
 	+ rev[cp, cp + l]/chars[cp, cp + 1] if reversal 
 We should be careful when we deal with the cases then the index of position of correction equal to 0 since in these cases, we don't have any information about cp-1 and according to the advice of professor,we calculate the number of words in training set instead which is also quite rational. The method we use to calcuate pr(c) is ELE and the posterior probility pr(c)*pr(t|c). 
 
-We evaluated our algorithm using precision and recall, in both word level and character level. And the result shows that we improved the word precision from 67 to 77; word recall from 66 to 75; character precision from 94 to 96; character recall from 91 to 94, which is a significant enhancement to the tesseract.
+We evaluated our algorithm using precision and recall, in both word level and character level. And the result shows that we improved the word precision from 0.67 to 0.77; word recall from 0.66 to 0.75; character precision from 0.94 to 0.96; character recall from 0.91 to 0.94, which is a significant enhancement to the tesseract.
 
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
 
