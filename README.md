@@ -14,9 +14,20 @@
 	+ Ying Jin yj2453@columbia.edu
 
 + Project summary: In this project, we created an OCR post-processing procedure to enhance Tesseract OCR output. For dectection we used the D-3 method which includes feature engineering and training the Support Vector Machine (SVM) for the classification. First, we labelled tesseract using the ground truth, but we ignored the files with different number of lines and lines with different number of words. For the improvement, we could have implemented a way to include all the files and all the lines. Each feature was built using separate functions and Buildfeature fuction is used to aggregate all the features and to create a feature matrix. Then the result was fed into SVM for training. Training took about 30 mins. 
-	
-**Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. Hyunbin Yoo and Guanren Wang worked on detection part together, while Yunhao Huang, Feng Su and Ying Jin worked on correction part. All team members approve our work presented in this GitHub repository including this contributions statement. 
 
+For correction part, we used C-3 method which can help us to detect those words containning exact one typos on the test data from detection part. First, we used edit distance to find each typo's potential correction candidates. Then we used Bayesian combination rule to choose the most possible correction. And the algorithm we used to calcaute the pr(t|c) is stated as following:
+del[cp_ 1, cp]/chars[cp-1, cp] if deletion
+add[cp_ l, tp]/chars[cp-l]  if insertion
+sub[tp, Cp]/chars[cp] if substitution 
+rev[cp, cp + l]/chars[cp, cp + 1] if reversal 
+We should be careful when we deal with the cases then the index of position of correction equal to 0 since in these cases, we don't have any information about cp-1 and according to the advice of professor,we calculate the number of words in training set instead which is also quite rational. The method we use to calcuate pr(c) is ELE and the posterior probility = pr(c)*pr(t|c). 
+
+We evaluated our algorithm using precision and recall, in both word level and character level. And the result shows that we improved the word precision from 67 to 77; word recall from 66 to 75; character precision from 94 to 96; character recall from 91 to 94, which is a significant enhancement to the tesseract.
+
+**Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
+HyunBin Yoo and Guanren Wang developed the detection SVM model and wrote the detection part.  
+Andy Huang, Feng Su and Ying Jin discussed, explored the correction model and designed, carried out the evaluation part.All team members contributed to the GitHub repository and prepared the presentation. All team members approve our work presented in this GitHub repository including this contributions statement. 
+	
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
 ```
