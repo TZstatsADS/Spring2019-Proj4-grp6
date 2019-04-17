@@ -27,6 +27,7 @@ We should be careful when we deal with the cases then the index of position of c
 We evaluated our algorithm using precision and recall, in both word level and character level. And the result shows that we improved the word precision from 67 to 77; word recall from 66 to 75; character precision from 94 to 96; character recall from 91 to 94, which is a significant enhancement to the tesseract.
 
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) 
+
 HyunBin Yoo and Guanren Wang developed the detection SVM model and wrote the detection part.  
 Andy Huang, Feng Su and Ying Jin discussed, explored the correction model and designed, carried out the evaluation part.All team members contributed to the GitHub repository and prepared the presentation. All team members approve our work presented in this GitHub repository including this contributions statement. 
 	
