@@ -34,7 +34,7 @@ Project: OCR Post-Processing
 
 Team members: HyunBin Yoo, Guanren Wang, Andy Huang, Feng Su, Ying Jin.
 
-HyunBin Yoo and Guanren Wang brainstormed on which features would be appropriate as the features to SVM and developed the detection SVM model. HyunBin Yoo implemented the detection part algorithm in python. Andy Huang, Feng Su and Ying Jin discussed, explored the correction model and designed, carried out the evaluation part.All team members contributed to the GitHub repository and prepared the presentation. As a presenter, HyunBin Yoo created the powerpoint slide. All team members approve our work presented in our GitHub repository including this contribution statement.
+HyunBin Yoo and Guanren Wang brainstormed on which features would be appropriate as the features to SVM and developed the detection SVM model. HyunBin Yoo implemented the detection part algorithm in python. Andy Huang, Feng Su and Ying Jin discussed, explored the correction model and designed, carried out the evaluation part. All team members contributed to the GitHub repository and prepared the presentation. As a presenter, HyunBin Yoo created the powerpoint slide. All team members approve our work presented in our GitHub repository including this contribution statement.
 	
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
