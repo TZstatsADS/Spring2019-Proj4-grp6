@@ -9,7 +9,7 @@
 + Team members
 	+ HyunBin Yoo hy2506@columbia.edu
 	+ Guanren Wang gw2380@columbia.edu
-	+ Yunhao Huang yh3090@columbia.edu
+	+ Andy Huang yh3090@columbia.edu
 	+ Feng Su fs2658@columbia.edu
 	+ Ying Jin yj2453@columbia.edu
 
